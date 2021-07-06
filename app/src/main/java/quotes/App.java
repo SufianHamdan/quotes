@@ -21,7 +21,7 @@ public class App {
             // create a reader
             Reader reader = Files.newBufferedReader(Paths.get("C:/Users/peter/quotes/app/src/main/java/quotes/gson/recentquotes.json"));
 
-            // convert JSON array to list of users
+            // convert JSON array to list of quotes
             List<Quotes> users = new Gson().fromJson(reader, new TypeToken<List<Quotes>>() {}.getType());
 
             // print all quotes
