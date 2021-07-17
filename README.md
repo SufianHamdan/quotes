@@ -19,6 +19,17 @@ links:
 - [Quotes object class](./app/src/main/java/quotes/Quotes.java)
 - [JSON File](./app/src/main/java/quotes/gson/recentquotes.json)
 
+## second lab for quotes
+
+we read from API link a random text and author then print it out 
+
+if the connection failed: 
+
+we convert json to string, 
+and we save data into our existing file then print out the saved quote
+
+
+
 
 
 

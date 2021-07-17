@@ -33,8 +33,9 @@ class AppTest {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
 
-
+    @Test public void FileToStringAndParsTest() throws IOException {
 
     }
 }

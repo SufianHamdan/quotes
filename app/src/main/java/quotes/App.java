@@ -8,61 +8,79 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.Buffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+import java.nio.file.*;
+import java.util.ArrayList;
+import com.google.gson.Gson;
 
 public class App {
     public static void main(String[] args) throws IOException {
 
 
-//         Api link
+//        String filePath = "app/src/main/java/quotes/gson/recentquotes.json";
+//        Api link
 //        http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en
 
+        try{
+            //Set up new connection to read fro API link
+            String url = "http://[error]api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestMethod("GET");
+            System.out.println(connection);
 
-        try {
-            URL url = new URL("pi.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en");
+            //To read data from API we use stream reader then add it to buffered reader
+            InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String data = bufferedReader.readLine();
+            System.out.println(data);
+            bufferedReader.close();
+
+            // To convert string to json
+            Gson gson2 = new Gson();
+            QuotesApi qoute = gson2.fromJson(data, QuotesApi.class);
             Gson gson = new Gson();
-            QuotesApi q = null;
-            HttpURLConnection conn = null;
-            BufferedReader read = null;
 
-            conn = (HttpURLConnection) url.openConnection();
-            read = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            q = gson.fromJson(read, QuotesApi.class);
-            System.out.println("The Author Name: " + q.getQuoteAuthor());
-            System.out.println("The Quote: " + q.getQuotesText());
-            System.out.println("<<<<<>>>>>");
 
-        } catch (Exception IOException) {
-            System.out.println("we reach here");
+            // create a reader to read from file
+            BufferedReader br = new BufferedReader(
+                    new FileReader(args[0]));
 
-            try {
-                // create a reader
-                Reader reader = Files.newBufferedReader(Paths.get("C:/Users/peter/quotes/app/src/main/java/quotes/gson/recentquotes.json"));
+            ArrayList<Quotes> testCase = gson.fromJson(br, new TypeToken<ArrayList<Quotes>>() {}.getType());
 
-                // convert JSON array to list of quotes
-                List<Quotes> quotes = new Gson().fromJson(reader, new TypeToken<List<Quotes>>() {
-                }.getType());
+            int radnomQuote = (int)(Math.random()*(testCase.size()-1));
+            System.out.println("Name Of Author: "+qoute.getQuoteAuthor());
+            System.out.println("The Quote : " + qoute.getQuotesText());
+            System.out.println("Quote number : " + radnomQuote);
 
-                // print all quotes
-//            for(Quotes q: users){
-//                System.out.println(q.getAuthor() + "\n" + q.getText());
-//            }
-                int random = 0 + (int) (Math.random() * ((quotes.size() - 0) + 1));
+            // To save coming data from API in our file
+            Quotes NewQuote = new Quotes(qoute.getQuoteAuthor(),qoute.getQuotesText());
+            testCase.add(NewQuote);
+            String json = gson.toJson(testCase);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(args[0]));
+            bw.write(json);
+            bw.close();
+            System.out.println("the quote is >>> " + qoute.getQuoteAuthor());
+            System.out.println("the text is >>> " + qoute.getQuotesText());
+        }catch(IOException e){
 
-                // print one author and his text randomly
-                System.out.println(quotes.get(random).getAuthor() + " \n" + quotes.get(random).getText());
+            System.out.println("not connected");
+            Gson gson = new Gson();
 
-                // close reader
-                reader.close();
+            // create a reader
+            Reader reader = Files.newBufferedReader(Paths.get(args[0]));
+            BufferedReader br = new BufferedReader(
+                    new FileReader(args[0]));
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            //convert the json string back to object
+            Quotes[] testCase = gson.fromJson(br, Quotes[].class);
+            int radnomQuote = (int)(Math.random()*(testCase.length-1));
+            System.out.println("Name Of Author: "+testCase[radnomQuote].getAuthor());
+            System.out.println("The Quote : " + testCase[radnomQuote].getText());
+            System.out.println("Quote number : " + radnomQuote);
         }
+
+
     }
 }
