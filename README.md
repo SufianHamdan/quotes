@@ -14,19 +14,22 @@ Cloning this Repo you will have to:
 - import GSON library
 - import reader buffer library
 
-links:
-- [App](./app/src/main/java/quotes/App.java)
-- [Quotes object class](./app/src/main/java/quotes/Quotes.java)
-- [JSON File](./app/src/main/java/quotes/gson/recentquotes.json)
+run this file by typing `gradle run` u will get a random quote from json file
+
 
 ## second lab for quotes
 
-we read from API link a random text and author then print it out 
+we read from API link a random text and author then print it out,
+we convert json to string,
+and we save data into our existing file then print out the saved quote if the connection failed.
 
-if the connection failed: 
 
-we convert json to string, 
-and we save data into our existing file then print out the saved quote
+run this code by typing `gradle run` u will get random quote from API link
+
+or you can try to change the link and u will get the saved quote from the file
+
+
+
 
 
 
